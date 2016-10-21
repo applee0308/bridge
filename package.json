@@ -1,0 +1,23 @@
+{
+  "name": "bridge",
+  "version": "1.0.0",
+  "description": "the bridge of ADOS to PORTAL,PV,UV",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Bridge",
+    "PV",
+    "UV"
+  ],
+  "author": "Shine_zh",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.15.2",
+    "babel-core": "^6.17.0",
+    "babel-loader": "^6.2.5",
+    "babel-preset-es2015": "^6.16.0",
+    "webpack": "^1.13.2"
+  }
+}
