@@ -1,10 +1,35 @@
-<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="yes" name="apple-touch-fullscreen" />
+    <meta content="telephone=no,email=no" name="format-detection" />
+    <meta name="App-Config" content="fullscreen=yes,useHistoryState=yes,transition=yes" />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=no' />
+    <title>Bridge测试</title>
+    <style>
+        *{margin: 0}
+        #mock img {width: 100%}
+        #mock video {width: 100%}
+    </style>
+    <script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    <!-- <script src="./dist/critical.js"></script> -->
 </head>
+
 <body>
-    <script src="./dist/bundle.js"></script>
+    <div id="mock">
+        <script>
+        var __DESTTYPE__ = 'wap';
+        var __SITECODE__ = 'shpdjc';
+        var __CHANNELPAGE__ = 'login';
+        var __FIXURL__ = '';
+        // var __FIXURL__ = 'api.json';
+        // var __FIXURL__ = 'apiOfApk.json';
+        // var __FIXURL__ = 'apiOfVideo.json';
+        </script>
+        <script src="./dist/bundle.js"></script>
+    </div>
 </body>
+
 </html>

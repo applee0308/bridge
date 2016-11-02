@@ -50,7 +50,7 @@
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("'use strict';\n\nvar _axios = __webpack_require__(2);\n\nvar _axios2 = _interopRequireDefault(_axios);\n\nvar _getSysInfo = __webpack_require__(28);\n\nvar _getSysInfo2 = _interopRequireDefault(_getSysInfo);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nconsole.log((0, _getSysInfo2.default)());\n\n_axios2.default.get('/data.json', {\n    params: {\n        ID: 12345\n    }\n}).then(function (response) {\n    console.log(response.data);\n}).catch(function (error) {\n    console.log(error);\n});\n\n/*****************\n ** WEBPACK FOOTER\n ** ./src/index.js\n ** module id = 1\n ** module chunks = 0\n **/\n//# sourceURL=webpack:///./src/index.js?");
+	eval("'use strict';\n\nvar _axios = __webpack_require__(2);\n\nvar _axios2 = _interopRequireDefault(_axios);\n\nvar _hock = __webpack_require__(28);\n\nvar _getScreenInfo = __webpack_require__(30);\n\nvar _loadImage = __webpack_require__(31);\n\nvar _loadVideo = __webpack_require__(39);\n\nvar _getScript = __webpack_require__(37);\n\nvar _eventUtil = __webpack_require__(38);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nvar DirUrl = __FIXURL__ || 'http://192.168.110.9:8082/publish/ads/pv';\n\n(0, _hock.hock)();\n\n_axios2.default.get(DirUrl, {\n    params: {\n        destType: __DESTTYPE__,\n        siteCode: __SITECODE__,\n        channelPage: __CHANNELPAGE__,\n        screenInfo: (0, _getScreenInfo.getScreenInfo)()\n    }\n}).then(function (response) {\n    if (response.data.isOk) {\n        console.log('OK');\n    }\n    var _stgStyle = response.data.strategyType;\n    switch (_stgStyle) {\n        case 1:\n            (0, _loadImage.loadImage)(response.data.ideaUrl, 's');\n            break;\n        case 2:\n            // loadImage(response.data.ideaUrl, 'apk');\n            console.log(2);\n            break;\n        case 3:\n            console.log(3);\n            (0, _loadVideo.loadVideo)(response.data.ideaUrl, 'v');\n            break;\n        case 4:\n            (0, _loadImage.loadImage)(response.data.ideaUrl, 'a');\n            if (response.data.downloadType == 1) {\n                location.href = response.data.apkUrl;\n            } else {\n                var _d = document.getElementsByClassName('a')[0];\n                alert('点击图片下载');\n                _eventUtil.eventUtil.addHandler(_d, 'click', function () {\n                    location.href = response.data.apkUrl;\n                });\n            }\n            break;\n        default:\n            console.warn('未正确返回');\n    }\n}).catch(function (error) {\n    console.log(error);\n});\n\nfunction bar() {\n    console.log('JS of behavior must be lated');\n}\n\nfunction foo() {\n    var h = document.querySelector('#_ADOS_');\n    h.innerHTML = str;\n    // var nodeOfScript = h.getElementsByTagName('script');\n    // var scriptStr = '';\n    // for (var i = nodeOfScript.length - 1; i >= 0; i--) {\n    //     scriptStr += nodeOfScript[i].innerHTML;\n    // }\n    // eval(scriptStr);\n    console.log('JS for create DOM is ready');\n}\n\n// function f() {\n//     getScript('compiled.js', document.querySelector('#_ADOS_'), foo);\n// }\n// function e() {\n//     getScript('http://cdn.bootcss.com/jquery/3.1.1/jquery.min.js', document.getElementsByTagName('body')[0], bar);\n// }\n\n// f();\n// e();\n\n/*****************\n ** WEBPACK FOOTER\n ** ./src/index.js\n ** module id = 1\n ** module chunks = 0\n **/\n//# sourceURL=webpack:///./src/index.js?");
 
 /***/ },
 /* 2 */
@@ -212,7 +212,43 @@
 /* 28 */
 /***/ function(module, exports) {
 
-	eval("\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\nfunction getSysInfo() {\n    var isWin7, isVista, isWin2003, isWinXp, isWin2000, isWindows, isMac, isAir, isLinux, sys;\n    var ua = navigator.userAgent.toLowerCase();\n    isWin7 = ua.indexOf(\"nt 6.1\") > -1;\n    isVista = ua.indexOf(\"nt 6.0\") > -1;\n    isWin2003 = ua.indexOf(\"nt 5.2\") > -1;\n    isWinXp = ua.indexOf(\"nt 5.1\") > -1;\n    isWin2000 = ua.indexOf(\"nt 5.0\") > -1;\n    isWindows = ua.indexOf(\"windows\") != -1 || ua.indexOf(\"win32\") != -1;\n    isMac = ua.indexOf(\"macintosh\") != -1 || ua.indexOf(\"mac os x\") != -1;\n    isAir = ua.indexOf(\"adobeair\") != -1;\n    isLinux = ua.indexOf(\"linux\") != -1;\n    var broser = \"\";\n    if (isWin7) {\n        sys = \"Windows 7\";\n    } else if (isVista) {\n        sys = \"Vista\";\n    } else if (isWinXp) {\n        sys = \"Windows xp\";\n    } else if (isWin2003) {\n        sys = \"Windows 2003\";\n    } else if (isWin2000) {\n        sys = \"Windows 2000\";\n    } else if (isWindows) {\n        sys = \"Windows\";\n    } else if (isMac) {\n        sys = \"Macintosh\";\n    } else if (isAir) {\n        sys = \"Adobeair\";\n    } else if (isLinux) {\n        sys = \"Linux\";\n    } else {\n        sys = \"Unknow\";\n    }\n    return sys;\n}\n\nexports.default = getSysInfo;\n\n/*****************\n ** WEBPACK FOOTER\n ** ./src/utils/getSysInfo.js\n ** module id = 28\n ** module chunks = 0\n **/\n//# sourceURL=webpack:///./src/utils/getSysInfo.js?");
+	eval("\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n\tvalue: true\n});\nfunction hock() {\n\tdocument.write(\"<div id='_ADOS_'></div>\");\n}\n\nexports.hock = hock;\n\n/*****************\n ** WEBPACK FOOTER\n ** ./src/components/hock/hock.js\n ** module id = 28\n ** module chunks = 0\n **/\n//# sourceURL=webpack:///./src/components/hock/hock.js?");
+
+/***/ },
+/* 29 */,
+/* 30 */
+/***/ function(module, exports) {
+
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\nfunction getScreenInfo() {\n    var w = window.screen.width;\n    var h = window.screen.height;\n    return 'w:' + w + ' h:' + h;\n}\n\nexports.getScreenInfo = getScreenInfo;\n\n/*****************\n ** WEBPACK FOOTER\n ** ./src/components/getScreenInfo/getScreenInfo.js\n ** module id = 30\n ** module chunks = 0\n **/\n//# sourceURL=webpack:///./src/components/getScreenInfo/getScreenInfo.js?");
+
+/***/ },
+/* 31 */
+/***/ function(module, exports) {
+
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\nfunction loadImage(ref, type) {\n    var hock = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : document.getElementById('_ADOS_');\n\n    var i = document.createElement('img');\n    i.src = ref;\n    i.setAttribute('class', type);\n    i.setAttribute('data-ads-type', type);\n    hock.appendChild(i);\n}\n\nexports.loadImage = loadImage;\n\n/*****************\n ** WEBPACK FOOTER\n ** ./src/components/loadImage/loadImage.js\n ** module id = 31\n ** module chunks = 0\n **/\n//# sourceURL=webpack:///./src/components/loadImage/loadImage.js?");
+
+/***/ },
+/* 32 */,
+/* 33 */,
+/* 34 */,
+/* 35 */,
+/* 36 */,
+/* 37 */
+/***/ function(module, exports) {
+
+	eval("\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\nfunction getScript(url, hock, callback) {\n    var h = hock;\n    var script = document.createElement(\"script\");\n    script.src = url;\n    var done = false;\n    script.onload = script.onreadystatechange = function () {\n        if (!done && (!this.readyState || this.readyState == \"loaded\" || this.readyState == \"complete\")) {\n            done = true;\n            callback();\n            script.onload = script.onreadystatechange = null;\n        }\n    };\n    h.appendChild(script);\n}\n\nexports.getScript = getScript;\n\n/*****************\n ** WEBPACK FOOTER\n ** ./src/components/getScript/getScript.js\n ** module id = 37\n ** module chunks = 0\n **/\n//# sourceURL=webpack:///./src/components/getScript/getScript.js?");
+
+/***/ },
+/* 38 */
+/***/ function(module, exports) {
+
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\nvar eventUtil = {\n    addHandler: function addHandler(element, type, handler) {\n        if (element.addEventListener) {\n            element.addEventListener(type, handler, false);\n        } else if (element.attachEvent) {\n            element.attachEvent('on' + type, hander);\n        } else {\n            element['on' + type] = handler;\n        }\n    }\n};\n\nexports.eventUtil = eventUtil;\n\n/*****************\n ** WEBPACK FOOTER\n ** ./src/utils/eventUtil.js\n ** module id = 38\n ** module chunks = 0\n **/\n//# sourceURL=webpack:///./src/utils/eventUtil.js?");
+
+/***/ },
+/* 39 */
+/***/ function(module, exports) {
+
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\nfunction loadVideo(ref, type) {\n    var hock = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : document.getElementById('_ADOS_');\n\n    var v = document.createElement('video');\n    v.src = ref;\n    v.setAttribute('class', type);\n    v.setAttribute('data-ads-type', type);\n    v.setAttribute('controls', 'controls');\n    v.setAttribute('preload', 'preload');\n    hock.appendChild(v);\n}\n\nexports.loadVideo = loadVideo;\n\n/*****************\n ** WEBPACK FOOTER\n ** ./src/components/loadVideo/loadVideo.js\n ** module id = 39\n ** module chunks = 0\n **/\n//# sourceURL=webpack:///./src/components/loadVideo/loadVideo.js?");
 
 /***/ }
 /******/ ]);

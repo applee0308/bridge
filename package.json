@@ -4,7 +4,8 @@
   "description": "the bridge of ADOS to PORTAL,PV,UV",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack --progress --watch"
   },
   "keywords": [
     "Bridge",
@@ -18,6 +19,9 @@
     "babel-core": "^6.17.0",
     "babel-loader": "^6.2.5",
     "babel-preset-es2015": "^6.16.0",
+    "babel-preset-stage-2": "^6.18.0"
+  },
+  "devDependencies": {
     "webpack": "^1.13.2"
   }
 }
