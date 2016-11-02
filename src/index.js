@@ -1,10 +1,10 @@
 import axios from 'axios';
 
 import { hock } from './components/hock/hock.js';
-import { getScreenInfo } from './components/getScreenInfo/getScreenInfo.js';
 import { loadImage } from './components/loadImage/loadImage.js';
 import { loadVideo } from './components/loadVideo/loadVideo.js';
 import { getScript } from './components/getScript/getScript.js';
+import { screenInfo } from './components/screenInfo/screenInfo.js';
 
 import { eventUtil } from './utils/eventUtil.js';
 
@@ -17,7 +17,8 @@ axios.get(DirUrl, {
         destType: __DESTTYPE__,
         siteCode: __SITECODE__,
         channelPage: __CHANNELPAGE__,
-        screenInfo: getScreenInfo()
+        scrren_width: screenInfo.getScreenWidth(),
+        scrren_height: screenInfo.getScreenHeight()
     }
 })
 
