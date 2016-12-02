@@ -12,6 +12,8 @@ import { imageBeacon } from './components/imageBeacon/imageBeacon.js';
 import { createInputElement } from './components/createInputElement/createInputElement.js';
 
 import { eventUtil } from './utils/eventUtil.js';
+import { getCookie } from './utils/getCookie.js';
+import { url } from './utils/url.js';
 
 var adosUrl = __FIXURL__ || 'http://192.168.110.9:8082/publish/ads/pv';
 
@@ -23,43 +25,71 @@ axios.get(adosUrl, {
         siteCode: __SITECODE__,
         channelPage: __CHANNELPAGE__,
         scrren_width: screenInfo.getScreenWidth(),
-        scrren_height: screenInfo.getScreenHeight()
+        scrren_height: screenInfo.getScreenHeight(),
+        mobile: getCookie('mobile'),
+        sequence: getCookie('sequence'),
+        device_mac: getCookie('_mac_')
     }
 })
 
 .then(function(response) {
+	var _stgStyle = response.data.strategyType;
+    var _arrCkUrl = response.data.ckUrl.split(';') || null;
+    var _arrPvUrl = response.data.pvUrl.split(';') || null;
+    var _lenOfArrCkUrl = _arrCkUrl.length;
+    var _skipUrl = response.data.skipUrl;
+
     if (response.data.isOk) {
         createInputElement('_ADOS_ADID_', response.data.adId);
-        imageBeacon(response.data.pvUrl, 'pv');
     }
-    var _stgStyle = response.data.strategyType;
-    var _arrCkUrl = response.data.ckUrl.split(';');
-    var _skipUrl = response.data.skipUrl;
+
+    if (_arrPvUrl[0] !== "") {
+        for (var i = _arrPvUrl.length - 1; i >= 0; i--) {
+            imageBeacon(_arrPvUrl[i], 'pv');
+        }
+    }else {
+        console.warn('no 3rd pv');
+    }
+
     switch (_stgStyle) {
         case (1):
             loadImage(response.data.ideaUrl, '_s_');
+
             var _s_ = document.getElementsByClassName('_s_')[0];
-            var _sflag = true;
+            var _stop = true;
+            if (__DESTTYPE__ == "wap") {
+                _s_.style.width = "100%";
+            }
             eventUtil.addHandler(_s_, 'click', function() {
-                if (_sflag) {
-                    imageBeacon(_arrCkUrl[0], 'ck');
-                    axios.get(_arrCkUrl[1], {
-                        params: {
-                            destType: __DESTTYPE__,
-                            siteCode: __SITECODE__,
-                            channelPage: __CHANNELPAGE__,
-                            scrren_width: screenInfo.getScreenWidth(),
-                            scrren_height: screenInfo.getScreenHeight(),
-                            adId: document.getElementById('_ADOS_ADID_').value
-                        }
-                    }).then(function(response) {
-                        console.log('simple ad xhr');
-                        location.href = _skipUrl;
-                    }).catch(function(error) {
-                        console.log(error);
-                    });
+                if (_stop) {
+                    _stop = false;
+                    if (_skipUrl == "") {
+                        console.log('no skip url');
+                    }else {
+                        if (_arrCkUrl[0] == "") {
+                            console.log('no 3 ck');
+                        } else {
+                            for (var i = _arrCkUrl.length - 1; i >= 0; i--) {
+                                imageBeacon(_arrCkUrl[i], 'ck');
+                            }
+                        } 
+                        axios.get(url, {
+                            params: {
+                                destType: __DESTTYPE__,
+                                siteCode: __SITECODE__,
+                                channelPage: __CHANNELPAGE__,
+                                scrren_width: screenInfo.getScreenWidth(),
+                                scrren_height: screenInfo.getScreenHeight(),
+                                adId: document.getElementById('_ADOS_ADID_').value
+                            }
+                        }).then(function(response) {
+                            console.log('s xhr');
+                            location.href = _skipUrl;
+                        }).catch(function(error) {
+                            console.log(error);
+                        });                
+                    }
                 }
-                _sflag = false;
             });
             break;
         case (2):

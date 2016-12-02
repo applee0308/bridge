@@ -1,9 +1,12 @@
 {
+    "apkUrl": "",
+    "ckUrl": "1;2;3",
+    "adId": "1151480413256974001",
     "isOk": "ok",
-    "pvUrl": "http://v.admaster.com.cn/i/a73668,b1264312,c2780,i0,m202,h",
-    "ck": "http://clickc.admaster.com.cn/c/a73668,b1264312,c2780,i0,m101,h",
+    "ideaUrl": "http://192.168.110.9:8091/opt/staticDir/a221e172-81ec-43ad-893d-0664237c8511.jpg",
+    "pvUrl": "",
+    "downloadUrl": "http://192.168.110.9:8082/publish/download",
+    "carouselAd": "1",
     "strategyType": 1,
-    "adId": "1234567890",
-    "ideaUrl": "http://jwf.cc:8008/storage/image/13f7fb56-6073-48f0-b6f2-6e8fcd4c8c8a.jpg",
-    "activityUrl": "dom.js,bhv.js"
+    "skipUrl": "1"
 }
