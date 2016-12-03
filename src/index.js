@@ -95,6 +95,7 @@ axios.get(adosUrl, {
         case (2):
             var _activityUrl = response.data.activityUrl;
             var _arrActivityUrl = _activityUrl.split(',');
+            createInputElement('_ADOS_ADTAG_', response.data.advertiserTag);
 
             function bar() {
                 console.log('JS of behavior must be lated');
