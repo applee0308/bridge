@@ -1254,11 +1254,22 @@ interpret@^0.6.4:
   version "0.6.6"
   resolved "https://registry.yarnpkg.com/interpret/-/interpret-0.6.6.tgz#fecd7a18e7ce5ca6abfb953e1f86213a49f1625b"
 
+intervalometer@^1.0.0:
+  version "1.0.2"
+  resolved "http://registry.npm.taobao.org/intervalometer/download/intervalometer-1.0.2.tgz#7c08f4ac07bd8876f9378fb4c74ff9b40e87d4be"
+
 invariant@^2.2.0:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.1.tgz#b097010547668c7e337028ebe816ebe36c8a8d54"
   dependencies:
     loose-envify "^1.0.0"
+
+iphone-inline-video:
+  version "1.9.4"
+  resolved "http://registry.npm.taobao.org/iphone-inline-video/download/iphone-inline-video-1.9.4.tgz#b04134eb7e903dfd5b557aeb272fc6d11539eafb"
+  dependencies:
+    intervalometer "^1.0.0"
+    poor-mans-symbol "^1.0.1"
 
 is-binary-path@^1.0.0:
   version "1.0.1"
@@ -1662,6 +1673,10 @@ pinkie-promise@^2.0.0:
 pinkie@^2.0.0:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/pinkie/-/pinkie-2.0.4.tgz#72556b80cfa0d48a974e80e77248e80ed4f7f870"
+
+poor-mans-symbol@^1.0.1:
+  version "1.0.1"
+  resolved "http://registry.npm.taobao.org/poor-mans-symbol/download/poor-mans-symbol-1.0.1.tgz#0c1b65ff1d49c07402b2235e562077d120671d0c"
 
 preserve@^0.2.0:
   version "0.2.0"

@@ -1,6 +1,7 @@
 require('es6-promise').polyfill();
 
 import axios from 'axios';
+import makeVideoPlayableInline from 'iphone-inline-video';
 
 import { hock } from './components/hock/hock.js';
 import { loadImage } from './components/loadImage/loadImage.js';
@@ -14,6 +15,7 @@ import { createInputElement } from './components/createInputElement/createInputE
 import { eventUtil } from './utils/eventUtil.js';
 import { getCookie } from './utils/getCookie.js';
 import { url } from './utils/url.js';
+import { utils } from './utils/utils.js';
 
 var adosUrl = __FIXURL__ || 'http://192.168.110.9:8082/publish/ads/pv';
 
@@ -33,7 +35,7 @@ axios.get(adosUrl, {
 })
 
 .then(function(response) {
-	var _stgStyle = response.data.strategyType;
+    var _stgStyle = response.data.strategyType;
     var _arrCkUrl = response.data.ckUrl.split(';') || null;
     var _arrPvUrl = response.data.pvUrl.split(';') || null;
     var _lenOfArrCkUrl = _arrCkUrl.length;
@@ -47,32 +49,32 @@ axios.get(adosUrl, {
         for (var i = _arrPvUrl.length - 1; i >= 0; i--) {
             imageBeacon(_arrPvUrl[i], 'pv');
         }
-    }else {
+    } else {
         console.warn('no 3rd pv');
     }
 
     switch (_stgStyle) {
         case (1):
             loadImage(response.data.ideaUrl, '_s_');
-
             var _s_ = document.getElementsByClassName('_s_')[0];
+            utils.addClass(_s_, 'forck');
             var _stop = true;
-            if (__DESTTYPE__ == "wap") {
-                _s_.style.width = "100%";
+            if (__DESTTYPE__ == 'wap') {
+                _s_.style.width = '100%';
             }
             eventUtil.addHandler(_s_, 'click', function() {
                 if (_stop) {
                     _stop = false;
                     if (_skipUrl == "") {
                         console.log('no skip url');
-                    }else {
+                    } else {
                         if (_arrCkUrl[0] == "") {
                             console.log('no 3 ck');
                         } else {
                             for (var i = _arrCkUrl.length - 1; i >= 0; i--) {
                                 imageBeacon(_arrCkUrl[i], 'ck');
                             }
-                        } 
+                        }
                         axios.get(url, {
                             params: {
                                 destType: __DESTTYPE__,
@@ -87,7 +89,7 @@ axios.get(adosUrl, {
                             location.href = _skipUrl;
                         }).catch(function(error) {
                             console.log(error);
-                        });                
+                        });
                     }
                 }
             });
@@ -102,7 +104,7 @@ axios.get(adosUrl, {
             }
 
             function foo() {
-                var h = document.querySelector('#_ADOS_');
+                var h = document.getElementById('_ADOS_');
                 h.innerHTML = str;
                 var nodeOfScript = h.getElementsByTagName('script');
                 var scriptStr = '';
@@ -123,6 +125,9 @@ axios.get(adosUrl, {
         case (3):
             loadVideo(response.data.ideaUrl, '_v_');
             var _v_ = document.getElementsByClassName('_v_')[0];
+            utils.addClass(_v_, 'forck');
+            makeVideoPlayableInline(_v_);
+            _v_.style.width = '100%';
             var _vflag = true;
             eventUtil.addHandler(_v_, 'click', function() {
                 if (_vflag) {
@@ -148,7 +153,11 @@ axios.get(adosUrl, {
             });
             break;
         case (4):
+            var _apkUrl = response.data.apkUrl;
             loadImage(response.data.ideaUrl, '_a_');
+            var _a_ = document.getElementsByClassName('_a_')[0];
+            utils.addClass(_a_, 'forck');
+            _a_.style.width = '100%';
             if (response.data.downloadType == 1) {
                 axios.get(response.data.downloadUrl, {
                     params: {
@@ -161,12 +170,11 @@ axios.get(adosUrl, {
                     }
                 }).then(function(response) {
                     console.log('apk xhr');
-                    location.href = response.data.apkUrl;
+                    window.location.href = _apkUrl;
                 }).catch(function(error) {
                     console.log(error);
                 });
             } else {
-                var _a_ = document.getElementsByClassName('_a_')[0];
                 eventUtil.addHandler(_a_, 'click', function() {
                     axios.get(response.data.downloadUrl, {
                         params: {
@@ -179,7 +187,8 @@ axios.get(adosUrl, {
                         }
                     }).then(function(response) {
                         console.log('apk xhr');
-                        location.href = response.data.apkUrl;
+                        console.log(_apkUrl);
+                        window.location.href = _apkUrl;
                     }).catch(function(error) {
                         console.log(error);
                     });
