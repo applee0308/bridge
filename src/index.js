@@ -1,7 +1,7 @@
 require('es6-promise').polyfill();
 
 import axios from 'axios';
-import makeVideoPlayableInline from 'iphone-inline-video';
+// import makeVideoPlayableInline from 'iphone-inline-video';
 
 import { hock } from './components/hock/hock.js';
 import { loadImage } from './components/loadImage/loadImage.js';
@@ -13,13 +13,26 @@ import { imageBeacon } from './components/imageBeacon/imageBeacon.js';
 import { createInputElement } from './components/createInputElement/createInputElement.js';
 
 import { eventUtil } from './utils/eventUtil.js';
-import { getCookie } from './utils/getCookie.js';
+import { getCookie, setCookie } from './utils/handleCookie.js';
 import { url } from './utils/url.js';
 import { utils } from './utils/utils.js';
 
 var adosUrl = __FIXURL__ || 'http://192.168.110.9:8082/publish/ads/pv';
 
 hock();
+
+var arrayOfPrefixedCookie = [];
+var _cookieName = ['prefiexCookieOfIndex', 'prefiexCookieOfLogin', 'prefiexCookieOfWait', 'prefiexCookieOfConfirm'];
+
+function arrayOfOpPrefixedCookie(cookieName) {
+    if (getCookie(cookieName)) {
+        arrayOfPrefixedCookie.push(getCookie(cookieName));
+    }
+}
+
+for (let i = 0; i < _cookieName.length; i++) {
+    arrayOfOpPrefixedCookie(_cookieName[i]);
+}
 
 axios.get(adosUrl, {
     params: {
@@ -28,13 +41,16 @@ axios.get(adosUrl, {
         channelPage: __CHANNELPAGE__,
         scrren_width: screenInfo.getScreenWidth(),
         scrren_height: screenInfo.getScreenHeight(),
-        mobile: getCookie('mobile'),
-        sequence: getCookie('sequence'),
-        device_mac: getCookie('_mac_')
+        // mobile: getCookie('mobile'),
+        // sequence: getCookie('sequence'),
+        // device_mac: getCookie('_mac_'),
+
+        prefixedCookie: arrayOfPrefixedCookie.join()
     }
 })
 
 .then(function(response) {
+
     var _stgStyle = response.data.strategyType;
     var _arrCkUrl = response.data.ckUrl.split(';') || null;
     var _arrPvUrl = response.data.pvUrl.split(';') || null;
@@ -43,6 +59,15 @@ axios.get(adosUrl, {
 
     if (response.data.isOk) {
         createInputElement('_ADOS_ADID_', response.data.adId);
+        if (__CHANNELPAGE__ == 'index') {
+            setCookie(_cookieName[0], response.data.adId);
+        } else if (__CHANNELPAGE__ == 'login') {
+            setCookie(_cookieName[1], response.data.adId);
+        } else if (__CHANNELPAGE__ == 'wait') {
+            setCookie(_cookieName[2], response.data.adId);
+        } else if (__CHANNELPAGE__ == 'confirm') {
+            setCookie(_cookieName[3], response.data.adId);
+        }
     }
 
     if (_arrPvUrl[0] !== "") {
@@ -52,6 +77,15 @@ axios.get(adosUrl, {
     } else {
         console.warn('no 3rd pv');
     }
+
+    let _adosXhrParams = {
+        destType: __DESTTYPE__,
+        siteCode: __SITECODE__,
+        channelPage: __CHANNELPAGE__,
+        scrren_width: screenInfo.getScreenWidth(),
+        scrren_height: screenInfo.getScreenHeight(),
+        adId: document.getElementById('_ADOS_ADID_').value
+    };
 
     switch (_stgStyle) {
         case (1):
@@ -71,21 +105,13 @@ axios.get(adosUrl, {
                         if (_arrCkUrl[0] == "") {
                             console.log('no 3 ck');
                         } else {
-                            for (var i = _arrCkUrl.length - 1; i >= 0; i--) {
+                            for (let i = _arrCkUrl.length - 1; i >= 0; i--) {
                                 imageBeacon(_arrCkUrl[i], 'ck');
                             }
                         }
                         axios.get(url, {
-                            params: {
-                                destType: __DESTTYPE__,
-                                siteCode: __SITECODE__,
-                                channelPage: __CHANNELPAGE__,
-                                scrren_width: screenInfo.getScreenWidth(),
-                                scrren_height: screenInfo.getScreenHeight(),
-                                adId: document.getElementById('_ADOS_ADID_').value
-                            }
+                            params: _adosXhrParams
                         }).then(function(response) {
-                            console.log('s xhr');
                             location.href = _skipUrl;
                         }).catch(function(error) {
                             console.log(error);
@@ -108,7 +134,7 @@ axios.get(adosUrl, {
                 h.innerHTML = str;
                 var nodeOfScript = h.getElementsByTagName('script');
                 var scriptStr = '';
-                for (var i = nodeOfScript.length - 1; i >= 0; i--) {
+                for (let i = nodeOfScript.length - 1; i >= 0; i--) {
                     scriptStr += nodeOfScript[i].innerHTML;
                 }
                 eval(scriptStr);
@@ -126,21 +152,14 @@ axios.get(adosUrl, {
             loadVideo(response.data.ideaUrl, '_v_');
             var _v_ = document.getElementsByClassName('_v_')[0];
             utils.addClass(_v_, 'forck');
-            makeVideoPlayableInline(_v_);
+            // makeVideoPlayableInline(_v_);
             _v_.style.width = '100%';
             var _vflag = true;
             eventUtil.addHandler(_v_, 'click', function() {
                 if (_vflag) {
                     imageBeacon(_arrCkUrl[0], 'ck');
                     axios.get(_arrCkUrl[1], {
-                        params: {
-                            destType: __DESTTYPE__,
-                            siteCode: __SITECODE__,
-                            channelPage: __CHANNELPAGE__,
-                            scrren_width: screenInfo.getScreenWidth(),
-                            scrren_height: screenInfo.getScreenHeight(),
-                            adId: document.getElementById('_ADOS_ADID_').value
-                        }
+                        params: _adosXhrParams
                     }).then(function(response) {
                         console.log(response.data);
                         console.log('video xhr');
@@ -153,23 +172,15 @@ axios.get(adosUrl, {
             });
             break;
         case (4):
-            var _apkUrl = response.data.apkUrl;
+            var _apkUrl = response.data.apkUrl; // APK 下载地址
             loadImage(response.data.ideaUrl, '_a_');
             var _a_ = document.getElementsByClassName('_a_')[0];
             utils.addClass(_a_, 'forck');
             _a_.style.width = '100%';
             if (response.data.downloadType == 1) {
                 axios.get(response.data.downloadUrl, {
-                    params: {
-                        destType: __DESTTYPE__,
-                        siteCode: __SITECODE__,
-                        channelPage: __CHANNELPAGE__,
-                        scrren_width: screenInfo.getScreenWidth(),
-                        scrren_height: screenInfo.getScreenHeight(),
-                        adId: document.getElementById('_ADOS_ADID_').value
-                    }
+                    params: _adosXhrParams
                 }).then(function(response) {
-                    console.log('apk xhr');
                     window.location.href = _apkUrl;
                 }).catch(function(error) {
                     console.log(error);
@@ -177,17 +188,8 @@ axios.get(adosUrl, {
             } else {
                 eventUtil.addHandler(_a_, 'click', function() {
                     axios.get(response.data.downloadUrl, {
-                        params: {
-                            destType: __DESTTYPE__,
-                            siteCode: __SITECODE__,
-                            channelPage: __CHANNELPAGE__,
-                            scrren_width: screenInfo.getScreenWidth(),
-                            scrren_height: screenInfo.getScreenHeight(),
-                            adId: document.getElementById('_ADOS_ADID_').value
-                        }
+                        params: _adosXhrParams
                     }).then(function(response) {
-                        console.log('apk xhr');
-                        console.log(_apkUrl);
                         window.location.href = _apkUrl;
                     }).catch(function(error) {
                         console.log(error);
