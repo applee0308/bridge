@@ -17,8 +17,7 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.15.2",
-    "es6-promise": "^4.0.5",
-    "iphone-inline-video": "^1.9.4"
+    "es6-promise": "^4.0.5"
   },
   "devDependencies": {
     "babel-core": "^6.17.0",

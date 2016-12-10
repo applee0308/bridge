@@ -1,7 +1,6 @@
 require('es6-promise').polyfill();
 
 import axios from 'axios';
-// import makeVideoPlayableInline from 'iphone-inline-video';
 
 import { hock } from './components/hock/hock.js';
 import { loadImage } from './components/loadImage/loadImage.js';
@@ -22,14 +21,14 @@ var adosUrl = __FIXURL__ || 'http://192.168.110.9:8082/publish/ads/pv';
 hock();
 
 var arrayOfPrefixedCookie = [];
-var _cookieName = ['prefiexCookieOfIndex', 'prefiexCookieOfLogin', 'prefiexCookieOfWait', 'prefiexCookieOfConfirm'];
 
+// 关联广告 cookie
+var _cookieName = ['prefiexCookieOfIndex', 'prefiexCookieOfLogin', 'prefiexCookieOfWait', 'prefiexCookieOfConfirm'];
 function arrayOfOpPrefixedCookie(cookieName) {
     if (getCookie(cookieName)) {
         arrayOfPrefixedCookie.push(getCookie(cookieName));
     }
 }
-
 for (let i = 0; i < _cookieName.length; i++) {
     arrayOfOpPrefixedCookie(_cookieName[i]);
 }
@@ -41,10 +40,10 @@ axios.get(adosUrl, {
         channelPage: __CHANNELPAGE__,
         scrren_width: screenInfo.getScreenWidth(),
         scrren_height: screenInfo.getScreenHeight(),
+
         // mobile: getCookie('mobile'),
         // sequence: getCookie('sequence'),
         // device_mac: getCookie('_mac_'),
-
         prefixedCookie: arrayOfPrefixedCookie.join()
     }
 })
@@ -57,6 +56,7 @@ axios.get(adosUrl, {
     var _lenOfArrCkUrl = _arrCkUrl.length;
     var _skipUrl = response.data.skipUrl;
 
+    // 关联广告 cookie
     if (response.data.isOk) {
         createInputElement('_ADOS_ADID_', response.data.adId);
         if (__CHANNELPAGE__ == 'index') {
@@ -152,7 +152,6 @@ axios.get(adosUrl, {
             loadVideo(response.data.ideaUrl, '_v_');
             var _v_ = document.getElementsByClassName('_v_')[0];
             utils.addClass(_v_, 'forck');
-            // makeVideoPlayableInline(_v_);
             _v_.style.width = '100%';
             var _vflag = true;
             eventUtil.addHandler(_v_, 'click', function() {
@@ -172,7 +171,7 @@ axios.get(adosUrl, {
             });
             break;
         case (4):
-            var _apkUrl = response.data.apkUrl; // APK 下载地址
+            var _apkUrl = response.data.apkUrl; // APK download link
             loadImage(response.data.ideaUrl, '_a_');
             var _a_ = document.getElementsByClassName('_a_')[0];
             utils.addClass(_a_, 'forck');

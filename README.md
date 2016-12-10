@@ -6,13 +6,31 @@ ADOS[广告投放系统]与Portal[广告平台]
 
 将生成的广告[广告资源来源于CND]渲染值Portal。
 
-###抽奖接口
+### H5广告接口
 
-####URL
+#### URL
+
+[PrefixedUrl] + '/h5act/common'
+
+#### params
+<pre><code>
+{
+    mediaCode: __SITECODE__,
+    spaceCode: __CHANNELPAGE__,
+    identity: document.getElementById('_ADOS_ADTAG_'),
+    adId: document.getElementById('_ADOS_ADID_'),
+    formSeri: JSON.stringify(obj) // 表单序列化数据
+    mobile: cookie形式[可以不传值]
+}
+</code></pre>
+
+### 抽奖接口
+
+#### URL
 
 [PrefixedUrl] + '/h5act/lottery'
 
-####params
+#### params
 <pre><code>
 {
     mediaCode: __SITECODE__,
