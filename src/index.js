@@ -12,26 +12,13 @@ import { imageBeacon } from './components/imageBeacon/imageBeacon.js';
 import { createInputElement } from './components/createInputElement/createInputElement.js';
 
 import { eventUtil } from './utils/eventUtil.js';
-import { getCookie, setCookie } from './utils/handleCookie.js';
-import { url } from './utils/url.js';
+// import { getCookie, setCookie } from './utils/handleCookie.js';
+import { cvurl, storeurl } from './utils/url.js';
 import { utils } from './utils/utils.js';
 
 var adosUrl = __FIXURL__ || 'http://192.168.110.9:8082/publish/ads/pv';
 
 hock();
-
-var arrayOfPrefixedCookie = [];
-
-// 关联广告 cookie
-var _cookieName = ['prefiexCookieOfIndex', 'prefiexCookieOfLogin', 'prefiexCookieOfWait', 'prefiexCookieOfConfirm'];
-function arrayOfOpPrefixedCookie(cookieName) {
-    if (getCookie(cookieName)) {
-        arrayOfPrefixedCookie.push(getCookie(cookieName));
-    }
-}
-for (let i = 0; i < _cookieName.length; i++) {
-    arrayOfOpPrefixedCookie(_cookieName[i]);
-}
 
 axios.get(adosUrl, {
     params: {
@@ -39,12 +26,7 @@ axios.get(adosUrl, {
         siteCode: __SITECODE__,
         channelPage: __CHANNELPAGE__,
         scrren_width: screenInfo.getScreenWidth(),
-        scrren_height: screenInfo.getScreenHeight(),
-
-        // mobile: getCookie('mobile'),
-        // sequence: getCookie('sequence'),
-        // device_mac: getCookie('_mac_'),
-        prefixedCookie: arrayOfPrefixedCookie.join()
+        scrren_height: screenInfo.getScreenHeight()
     }
 })
 
@@ -56,18 +38,9 @@ axios.get(adosUrl, {
     var _lenOfArrCkUrl = _arrCkUrl.length;
     var _skipUrl = response.data.skipUrl;
 
-    // 关联广告 cookie
     if (response.data.isOk) {
         createInputElement('_ADOS_ADID_', response.data.adId);
-        if (__CHANNELPAGE__ == 'index') {
-            setCookie(_cookieName[0], response.data.adId);
-        } else if (__CHANNELPAGE__ == 'login') {
-            setCookie(_cookieName[1], response.data.adId);
-        } else if (__CHANNELPAGE__ == 'wait') {
-            setCookie(_cookieName[2], response.data.adId);
-        } else if (__CHANNELPAGE__ == 'confirm') {
-            setCookie(_cookieName[3], response.data.adId);
-        }
+        imageBeacon(storeurl + '?adId=' + response.data.adId + '&siteCode=' + __SITECODE__ + '&channelPage=' + __CHANNELPAGE__ + '&destType=' + __DESTTYPE__, 'store');
     }
 
     if (_arrPvUrl[0] !== "") {
@@ -75,7 +48,7 @@ axios.get(adosUrl, {
             imageBeacon(_arrPvUrl[i], 'pv');
         }
     } else {
-        console.warn('no 3rd pv');
+        console.info('no 3rd pv');
     }
 
     let _adosXhrParams = {
