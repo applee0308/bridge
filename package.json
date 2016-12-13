@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack --progress --watch",
-    "install": "webpack  --config webpack.production.config.js"
+    "build": "webpack  --config webpack.production.config.js",
+    "preview": "webpack  --config webpack.preview.config.js"
   },
   "keywords": [
     "Bridge",

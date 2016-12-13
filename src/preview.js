@@ -15,20 +15,14 @@ import { eventUtil } from './utils/eventUtil.js';
 import { cvurl, storeurl } from './utils/url.js';
 import { utils } from './utils/utils.js';
 
-var adosUrl = __FIXURL__ || 'http://192.168.110.9:8082/publish/ads/pv';
+const previewUrl = 'http://192.168.110.9:8082/mgr/strategy/previewGd';
 
 hock();
-// 'http://192.168.110.9:8082/mgr/strategy/previewGd'
-axios.get(adosUrl, {
+
+axios.get(previewUrl, {
     params: {
-        destType: __DESTTYPE__,
-        siteCode: __SITECODE__,
-        channelPage: __CHANNELPAGE__,
-        scrren_width: screenInfo.getScreenWidth(),
-        scrren_height: screenInfo.getScreenHeight()
-        // strategyId: idforSearch
-    },
-    withCredentials: true
+        strategyId: idforSearch
+    }
 })
 
 .then(function(response) {
@@ -41,7 +35,6 @@ axios.get(adosUrl, {
 
     if (response.data.isOk) {
         createInputElement('_ADOS_ADID_', response.data.adId);
-        imageBeacon(storeurl + '?adId=' + response.data.adId + '&siteCode=' + __SITECODE__ + '&channelPage=' + __CHANNELPAGE__ + '&destType=' + __DESTTYPE__, 'store');
     }
 
     if (_arrPvUrl[0] !== "") {
@@ -52,14 +45,7 @@ axios.get(adosUrl, {
         console.info('no 3rd pv');
     }
 
-    let _adosXhrParams = {
-        destType: __DESTTYPE__,
-        siteCode: __SITECODE__,
-        channelPage: __CHANNELPAGE__,
-        scrren_width: screenInfo.getScreenWidth(),
-        scrren_height: screenInfo.getScreenHeight(),
-        adId: document.getElementById('_ADOS_ADID_').value
-    };
+    let _adosXhrParams = {};
 
     switch (_stgStyle) {
         case (1):
