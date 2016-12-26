@@ -18,7 +18,6 @@ import { utils } from './utils/utils.js';
 var adosUrl = __FIXURL__ || 'http://192.168.110.9:8082/publish/ads/pv';
 
 hock();
-// 'http://192.168.110.9:8082/mgr/strategy/previewGd'
 axios.get(adosUrl, {
     params: {
         destType: __DESTTYPE__,
@@ -26,7 +25,6 @@ axios.get(adosUrl, {
         channelPage: __CHANNELPAGE__,
         scrren_width: screenInfo.getScreenWidth(),
         scrren_height: screenInfo.getScreenHeight()
-        // strategyId: idforSearch
     },
     withCredentials: true
 })
@@ -63,7 +61,7 @@ axios.get(adosUrl, {
 
     switch (_stgStyle) {
         case (1):
-            loadImage(response.data.ideaUrl, '_s_');
+            loadImage(response.data.ideaUrl, '_s_', document.getElementById('_ADOS_'));
             var _s_ = document.getElementsByClassName('_s_')[0];
             utils.addClass(_s_, 'forck');
             var _stop = true;
