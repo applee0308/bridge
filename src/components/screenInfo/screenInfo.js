@@ -1,9 +1,9 @@
-var screenInfo = {
-    getScreenWidth: function() {
+const screenInfo = {
+    getScreenWidth() {
         var w = window.screen.width;
         return w;
     },
-    getScreenHeight: function() {
+    getScreenHeight() {
         var h = window.screen.height;
         return h;
     }

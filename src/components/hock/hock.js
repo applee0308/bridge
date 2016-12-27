@@ -1,5 +1,5 @@
-function hock() {
-	document.write(`<div id="_ADOS_"></div>`);
-}
+var hock = (name) => {
+    document.write(`<div id=${name}></div>`);
+};
 
 export { hock };

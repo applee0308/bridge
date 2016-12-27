@@ -1,7 +1,7 @@
-function loadVideo(ref, type, hock = document.getElementById('_ADOS_')) {
-    var hasVideo = !!(document.createElement('video').canPlayType);
+const loadVideo = (ref, type, hock) => {
+    const hasVideo = !!(document.createElement('video').canPlayType);
     if (hasVideo) {
-        var v = document.createElement('video');
+        const v = document.createElement('video');
         v.src = ref;
         v.setAttribute('class', type);
         v.setAttribute('data-ads-type', type);
@@ -15,6 +15,6 @@ function loadVideo(ref, type, hock = document.getElementById('_ADOS_')) {
         alert('您的浏览器不支持在线视频播放功能！');
     }
 
-}
+};
 
 export { loadVideo };

@@ -2,6 +2,7 @@ require('es6-promise').polyfill();
 
 import axios from 'axios';
 
+import { vars } from './components/vars/vars.js';
 import { hock } from './components/hock/hock.js';
 import { loadImage } from './components/loadImage/loadImage.js';
 import { loadVideo } from './components/loadVideo/loadVideo.js';
@@ -10,19 +11,24 @@ import { screenInfo } from './components/screenInfo/screenInfo.js';
 
 import { imageBeacon } from './components/imageBeacon/imageBeacon.js';
 import { createInputElement } from './components/createInputElement/createInputElement.js';
+import { createHockName } from './components/createHockName/createHockName.js';
 
 import { eventUtil } from './utils/eventUtil.js';
 import { cvurl, storeurl } from './utils/url.js';
 import { utils } from './utils/utils.js';
 
-var adosUrl = __FIXURL__ || 'http://192.168.110.9:8082/publish/ads/pv';
+var adosUrl = vars.adosUrl || 'http://192.168.110.9:8082/publish/ads/pv';
 
-hock();
+var hockName = createHockName();
+
+console.log(vars);
+
+hock(hockName[0]);
 axios.get(adosUrl, {
     params: {
-        destType: __DESTTYPE__,
-        siteCode: __SITECODE__,
-        channelPage: __CHANNELPAGE__,
+        destType: vars.destType,
+        siteCode: vars.siteCode,
+        channelPage: vars.channelPage,
         scrren_width: screenInfo.getScreenWidth(),
         scrren_height: screenInfo.getScreenHeight()
     },
@@ -39,7 +45,7 @@ axios.get(adosUrl, {
 
     if (response.data.isOk) {
         createInputElement('_ADOS_ADID_', response.data.adId);
-        imageBeacon(storeurl + '?adId=' + response.data.adId + '&siteCode=' + __SITECODE__ + '&channelPage=' + __CHANNELPAGE__ + '&destType=' + __DESTTYPE__, 'store');
+        imageBeacon(storeurl + '?adId=' + response.data.adId + '&siteCode=' + vars.siteCode + '&channelPage=' + vars.channelPage + '&destType=' + vars.destType, 'store');
     }
 
     if (_arrPvUrl[0] !== "") {
@@ -51,9 +57,9 @@ axios.get(adosUrl, {
     }
 
     let _adosXhrParams = {
-        destType: __DESTTYPE__,
-        siteCode: __SITECODE__,
-        channelPage: __CHANNELPAGE__,
+        destType: vars.destType,
+        siteCode: vars.siteCode,
+        channelPage: vars.channelPage,
         scrren_width: screenInfo.getScreenWidth(),
         scrren_height: screenInfo.getScreenHeight(),
         adId: document.getElementById('_ADOS_ADID_').value
@@ -61,11 +67,11 @@ axios.get(adosUrl, {
 
     switch (_stgStyle) {
         case (1):
-            loadImage(response.data.ideaUrl, '_s_', document.getElementById('_ADOS_'));
+            loadImage(response.data.ideaUrl, '_s_', document.getElementById(hockName[0]));
             var _s_ = document.getElementsByClassName('_s_')[0];
             utils.addClass(_s_, 'forck');
             var _stop = true;
-            if (__DESTTYPE__ == 'wap') {
+            if ((vars.destType) == 'wap') {
                 _s_.style.width = '100%';
             }
             eventUtil.addHandler(_s_, 'click', function() {
@@ -102,8 +108,8 @@ axios.get(adosUrl, {
             }
 
             function foo() {
-                var h = document.getElementById('_ADOS_');
-                h.innerHTML = str;
+                var h = document.getElementById(hockName[0]);
+                h.innerHTML = _ADOS_STR_;
                 var nodeOfScript = h.getElementsByTagName('script');
                 var scriptStr = '';
                 for (let i = nodeOfScript.length - 1; i >= 0; i--) {
@@ -118,10 +124,10 @@ axios.get(adosUrl, {
                     return;
                 }
             }
-            getScript(_arrActivityUrl[0], document.querySelector('#_ADOS_'), foo);
+            getScript(_arrActivityUrl[0], document.getElementById(hockName[0]), foo);
             break;
         case (3):
-            loadVideo(response.data.ideaUrl, '_v_');
+            loadVideo(response.data.ideaUrl, '_v_', document.getElementById(hockName[0]));
             var _v_ = document.getElementsByClassName('_v_')[0];
             utils.addClass(_v_, 'forck');
             _v_.style.width = '100%';
@@ -144,7 +150,7 @@ axios.get(adosUrl, {
             break;
         case (4):
             var _apkUrl = response.data.apkUrl; // APK download link
-            loadImage(response.data.ideaUrl, '_a_');
+            loadImage(response.data.ideaUrl, '_a_', document.getElementById(hockName[0]));
             var _a_ = document.getElementsByClassName('_a_')[0];
             utils.addClass(_a_, 'forck');
             _a_.style.width = '100%';

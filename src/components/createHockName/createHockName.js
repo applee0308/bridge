@@ -1,8 +1,8 @@
-function createNodeName() {
+const createHockName = () => {
 
-    var adsnode = [];
+    let adsnode = [];
 
-    function generateMixed(n) {
+    const generateMixed = (n) => {
         var chars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
         var res = "";
         for (var i = 0; i < n; i++) {
@@ -10,12 +10,12 @@ function createNodeName() {
             res += chars[id];
         }
         return res;
-    }
-    for (var i = 0; i < 2; i++) {
+    };
+    for (let i = 0; i < 1; i++) {
         adsnode.push(generateMixed(12));
     }
 
     return adsnode;
-}
+};
 
-export { createNodeName };
+export { createHockName };
