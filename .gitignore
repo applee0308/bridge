@@ -6,6 +6,7 @@ test
 node_modules/
 .eslintrc.js
 prepros.cfg
+*.log
 
 # Build file via webpack
 build.js
