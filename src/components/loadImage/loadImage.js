@@ -1,20 +1,10 @@
-const loadImage = (ref,type,hock) => {
-	const i = document.createElement('img');
-	i.src = ref;
-	i.setAttribute('class', type);
-	i.setAttribute('data-ads-type', type);
-	hock.appendChild(i);
+const loadImage = (ref, type, id, hock) => {
+    const i = document.createElement('img');
+    i.src = ref;
+    i.setAttribute('id', type);
+    i.setAttribute('class', type);
+    i.setAttribute('data-ads-id', id);
+    hock.appendChild(i);
 };
 
 export { loadImage };
-
-
-// function loadImage(ref, type, hock) {
-//     var i = document.createElement('img');
-//     i.src = ref;
-//     i.setAttribute('class', type);
-//     i.setAttribute('data-ads-type', type);
-//     hock.appendChild(i);
-// }
-
-// export { loadImage };

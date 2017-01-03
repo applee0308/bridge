@@ -1965,6 +1965,10 @@ supports-color@^3.1.0:
   dependencies:
     has-flag "^1.0.0"
 
+swiper:
+  version "3.4.1"
+  resolved "http://registry.npm.taobao.org/swiper/download/swiper-3.4.1.tgz#05f2e72c4fdc8f618e3570f5583696c54641d3a2"
+
 tapable@^0.1.8, tapable@~0.1.8:
   version "0.1.10"
   resolved "https://registry.yarnpkg.com/tapable/-/tapable-0.1.10.tgz#29c35707c2b70e50d07482b5d202e8ed446dafd4"
