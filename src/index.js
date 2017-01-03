@@ -41,9 +41,9 @@ axios.get(adosUrl, {
         const arrPvUrl = response.data.pvUrl.split(';') || null; // 第三方PV检测
         const skipUrl = response.data.skipUrl; // 策略跳转地址
         const adId = response.data.adId; // 广告唯一标识
-        const inputName = hockName + '-ID';
+        const inputName = hockName + '-ID'; // 存储广告名
         if (response.data.isOk == 'ok') {
-            imageBeacon(storeurl + '?adId=' + response.data.adId + '&siteCode=' + vars.siteCode + '&channelPage=' + vars.channelPage + '&destType=' + vars.destType, 'store');
+            imageBeacon(storeurl + '?adId=' + response.data.adId + '&siteCode=' + vars.siteCode + '&channelPage=' + vars.channelPage + '&destType=' + vars.destType, 'os-pv');
             if (arrPvUrl[0] !== "") {
                 for (let i = arrPvUrl.length - 1; i >= 0; i--) {
                     imageBeacon(arrPvUrl[i], 'pv');
@@ -202,22 +202,22 @@ axios.get(adosUrl, {
         }
     } else {
         const stgtype = response.data[0].strategyType;
+        const h = document.getElementById(hockName[0]);
         switch (stgtype) {
             case (5):
-                var h = document.getElementById(hockName[0]);
                 let swiperStr = ``;
+                let swiperPvUrlStr = '';
+                let swiperArrayOfPv = null;
                 for (let i = 0; i < response.data.length; i++) {
-                    swiperStr += `<div class="swiper-slide"><img class="singleSlideOfAdos forck forck-${response.data[i].adId}" data-id=${response.data[i].adId} data-url=${response.data[i].skipUrl} src=${response.data[i].ideaUrl} alt="" style="width:100%"/></div>`;
-                    imageBeacon(storeurl + '?adId=' + response.data[i].adId + '&siteCode=' + vars.siteCode + '&channelPage=' + vars.channelPage + '&destType=' + vars.destType, 'store');
+                    swiperStr += `<div class="swiper-slide"><img class="single-slide-ados forck forck-${response.data[i].adId}" data-id="${response.data[i].adId}" data-url="${response.data[i].skipUrl}" src='${response.data[i].ideaUrl}' alt="" style="width:100%"/></div>`;
+                    imageBeacon(storeurl + '?adId=' + response.data[i].adId + '&siteCode=' + vars.siteCode + '&channelPage=' + vars.channelPage + '&destType=' + vars.destType, 'os-pv');
                     const pvUrl = response.data[i].pvUrl;
-                    if (pvUrl == "") {
-                        console.info(`Swiper of ${i + 1} no 3rd pv`);
-                    } else {
-                        const arrPvUrl = pvUrl.split(';');
-                        console.log(arrPvUrl);
-                        // for (var i = 0; i < arrPvUrl.length; i++) {
-                        // 	imageBeacon(arrPvUrl[i], 'pv');
-                        // }
+                    swiperPvUrlStr += (pvUrl + ';');
+                }
+                swiperArrayOfPv = swiperPvUrlStr.split(';');
+                for (let i = 0; i < swiperArrayOfPv.length; i++) {
+                    if (swiperArrayOfPv[i] !== '') {
+                        imageBeacon(swiperArrayOfPv[i], 'third-pv');
                     }
                 }
                 h.innerHTML = `
@@ -225,15 +225,95 @@ axios.get(adosUrl, {
 				<div id="adosSwiper">
 					<div class="swiper-container" id="adosSwiperContainer">
 						<div class="swiper-wrapper">
-							${swiperStr}
+							${ swiperStr }
 						</div>
 						<div class="swiper-pagination"></div>
 					</div>
 				</div>`;
-                const adosSwiperContainer = new Swiper('#adosSwiperContainer', {
+                // swiper init
+                const adosSwiper = new Swiper('#adosSwiperContainer', {
                     loop: true,
+                    autoplay: 3500,
                     pagination: '.swiper-pagination'
                 });
+                // handle click
+                const singleSlideArray = Array.prototype.slice.call(document.getElementsByClassName('single-slide-ados'));
+                for (let i = 0; i < singleSlideArray.length; i++) {
+                    eventUtil.addHandler(singleSlideArray[i], 'click', function() {
+                        let swiperXhrParams = {
+                            destType: vars.destType,
+                            siteCode: vars.siteCode,
+                            channelPage: vars.channelPage,
+                            scrren_width: screenInfo.getScreenWidth(),
+                            scrren_height: screenInfo.getScreenHeight(),
+                            adId: this.dataset.id
+                        };
+                        let that = this;
+                        axios.get(cvurl, {
+                            params: swiperXhrParams
+                        }).then(function(response) {
+                            location.href = that.dataset.url;
+                        }).catch(function(error) {
+                            console.log(error);
+                        });
+                    });
+                }
+                break;
+            case (6):
+                console.log('point');
+                let entryPointStr = ``;
+                let entryPointPvUrlStr = '';
+                let entryPointArrayOfPv = null;
+                for (let i = 0; i < response.data.length; i++) {
+                    entryPointStr += `
+                    <li>
+		                <div class="item single-entrypoint-ados forck forck-${response.data[i].adId}" data-id="${response.data[i].adId}" data-url="${response.data[i].skipUrl}">
+		                    <div class="media">
+		                        <img  src='${response.data[i].ideaUrl}' alt="">
+		                    </div>
+		                    <div class="summary">${response.data[i].adName}</div>
+		                </div>
+		            </li>`;
+                    imageBeacon(storeurl + '?adId=' + response.data[i].adId + '&siteCode=' + vars.siteCode + '&channelPage=' + vars.channelPage + '&destType=' + vars.destType, 'os-pv');
+                    const pvUrl = response.data[i].pvUrl;
+                    entryPointPvUrlStr += (pvUrl + ';');
+                }
+                entryPointArrayOfPv = entryPointPvUrlStr.split(';');
+                // 3rd pv link
+                for (let i = 0; i < entryPointArrayOfPv.length; i++) {
+                    if (entryPointArrayOfPv[i] !== '') {
+                        imageBeacon(entryPointArrayOfPv[i], 'third-pv');
+                    }
+                }
+                h.innerHTML = `
+                <style>#__adosEntryPoint{padding:0 2%;background:#ececec}#__adosEntryPoint ul{margin:0;list-style:none;padding:0}#__adosEntryPoint ul li{float:left;width:20%;margin:10px auto;padding:0}#__adosEntryPoint ul li .item{text-align:center;margin:0 auto}#__adosEntryPoint ul li .item img{width:50px;height:50px;border-radius:50%}#__adosEntryPoint ul li .item .summary{text-align:center;margin:4px 0;font-size:13px;color:#b29f6b}#__adosEntryPoint:after,#__adosEntryPoint:before{display:table;content:" "}#__adosEntryPoint:after{clear:both}</style>
+				<div id="__adosEntryPoint">
+        			<ul>
+						${ entryPointStr }
+        			</ul>
+        		</div>
+                `;
+                const singleEntryPointArray = Array.prototype.slice.call(document.getElementsByClassName('single-entrypoint-ados'));
+                for (let i = 0; i < singleEntryPointArray.length; i++) {
+                    eventUtil.addHandler(singleEntryPointArray[i], 'click', function() {
+                        let entrypointXhrParams = {
+                            destType: vars.destType,
+                            siteCode: vars.siteCode,
+                            channelPage: vars.channelPage,
+                            scrren_width: screenInfo.getScreenWidth(),
+                            scrren_height: screenInfo.getScreenHeight(),
+                            adId: this.dataset.id
+                        };
+                        let that = this;
+                        axios.get(cvurl, {
+                            params: entrypointXhrParams
+                        }).then(function(response) {
+                            location.href = that.dataset.url;
+                        }).catch(function(error) {
+                            console.log(error);
+                        });
+                    });
+                }
                 break;
             default:
                 console.warn('Response error');
