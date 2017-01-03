@@ -5,7 +5,7 @@ ehthumbs.db
 test
 node_modules/
 .eslintrc.js
-prepros-6.cfg
+prepros-6.config
 *.log
 
 # Build file via webpack
