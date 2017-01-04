@@ -1,3 +1,3 @@
-const vars = _ADOS_2_;
+const vars = _ADOS_1_;
 
 export { vars };
