@@ -14,7 +14,6 @@ ADOS[广告投放系统]与Portal[广告平台]
 
 #### handleCookie
 
-#### params
 <pre><code>
 function getCookie(name) {
     var arr,
