@@ -8,9 +8,12 @@ node_modules/
 .eslintrc.js
 prepros-6.config
 
+*.log
+
 # Build file via webpack
 build.js
 build.js.map
+dist
 
 # Folder config file
 Desktop.ini

@@ -1,8 +1,8 @@
-function getScript(url, hock, callback) {
-    var h = hock;
-    var script = document.createElement("script");
+const getScript = (url, hock, callback) => {
+    const h = hock;
+    const script = document.createElement("script");
     script.src = url;
-    var done = false;
+    let done = false;
     script.onload = script.onreadystatechange = function() {
         if (!done && (!this.readyState || this.readyState == "loaded" || this.readyState == "complete")) {
             done = true;
@@ -11,6 +11,6 @@ function getScript(url, hock, callback) {
         }
     };
     h.appendChild(script);
-}
+};
 
 export { getScript };

@@ -1,9 +1,12 @@
 var utils = {
-    addClass: function(obj, cls) {
+    addClass(obj, cls) {
         if (!this.hasClass(obj, cls)) obj.className += " " + cls;
     },
-    hasClass: function(obj, cls) {
+    hasClass(obj, cls) {
         return obj.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+    },
+    isArray(obj) {
+    	return Object.prototype.toString.call(obj) === '[object Array]';
     }
 };
 
