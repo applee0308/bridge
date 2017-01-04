@@ -3,9 +3,10 @@ Thumbs.db
 ehthumbs.db
 
 test
+dist
 node_modules/
 .eslintrc.js
-prepros.cfg
+prepros-6.config
 
 # Build file via webpack
 build.js
