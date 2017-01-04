@@ -10,7 +10,7 @@ ADOS[广告投放系统]与Portal[广告平台]
 
 #### URL
 
-[PrefixedUrl] + '/h5act/common'
+[PrefixedUrl] + '/publish/h5act/common'
 
 #### handleCookie
 
@@ -32,8 +32,8 @@ function getCookie(name) {
 {
 	mediaCode: __SITECODE__,
 	spaceCode: __CHANNELPAGE__,
-	identity: document.getElementById('_ADOS_ADTAG_'),
-	adId: document.getElementById('_ADOS_ADID_'),
+	identity: document.getElementById('_ADOS_ADTAG_').value,
+	adId: document.getElementById('_ADOS_ADID_').value,
 	formSeri: JSON.stringify(obj) // 表单序列化数据
 	mobile: cookie形式[可以不传值]
 }
@@ -43,14 +43,14 @@ function getCookie(name) {
 
 #### URL
 
-[PrefixedUrl] + '/h5act/lottery'
+[PrefixedUrl] + '/publish/h5act/lottery'
 
 #### params
 <pre><code>
 {
 	mediaCode: __SITECODE__,
 	spaceCode: __CHANNELPAGE__,
-	adId: document.getElementById('_ADOS_ADID_'),
+	adId: document.getElementById('_ADOS_ADID_').value,
 	mobile: cookie形式[可以不传值]
 }
 </code></pre>
