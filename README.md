@@ -10,15 +10,30 @@ ADOS[广告投放系统]与Portal[广告平台]
 
 #### URL
 
-[PrefixedUrl] + '/h5act/common'
+[PrefixedUrl] + '/publish/h5act/common'
+
+#### getCookie
+
+<pre><code>
+function getCookie(name) {
+    var arr,
+        reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)');
+    arr = document.cookie.match(reg);
+    if (arr) {
+        return unescape(arr[2]);
+    } else {
+        return '';
+    }
+}
+</code></pre>
 
 #### params
 <pre><code>
 {
     mediaCode: __SITECODE__,
     spaceCode: __CHANNELPAGE__,
-    identity: document.getElementById('_ADOS_ADTAG_'),
-    adId: document.getElementById('_ADOS_ADID_'),
+    identity: document.getElementById('_ADOS_ADTAG_').value,
+    adId: document.getElementById('_ADOS_ADID_').value,
     formSeri: JSON.stringify(obj) // 表单序列化数据
     mobile: cookie形式[可以不传值]
 }
@@ -35,7 +50,7 @@ ADOS[广告投放系统]与Portal[广告平台]
 {
     mediaCode: __SITECODE__,
     spaceCode: __CHANNELPAGE__,
-    adId: document.getElementById('_ADOS_ADID_'),
+    adId: document.getElementById('_ADOS_ADID_').value,
     mobile: cookie形式[可以不传值]
 }
 </code></pre>
