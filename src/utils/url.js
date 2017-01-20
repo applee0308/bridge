@@ -1,4 +1,5 @@
-var cvurl = 'http://192.168.110.9:8082/publish/ads/click';
-const storeurl = 'http://192.168.110.9:8082/publish/cookieserver/mapping';
+const prefixUrl = 'http://pub.wiportal.cn';
+const cvurl = prefixUrl + '/publish/ads/click';
+const storeurl = prefixUrl + '/publish/cookieserver/mapping';
 
 export { cvurl, storeurl };
