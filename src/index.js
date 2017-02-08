@@ -130,16 +130,25 @@ axios.get(adosUrl, {
             var _vflag = true;
             eventUtil.addHandler(_v_, 'click', function() {
                 if (_vflag) {
+                    if (_skipUrl == "") {
+                        console.log('no skip url');
+                    } else {
+                        if (_arrCkUrl[0] == "") {
+                            console.log('no 3 ck');
+                        } else {
+                            for (let i = _arrCkUrl.length - 1; i >= 0; i--) {
+                                imageBeacon(_arrCkUrl[i], 'ck');
+                            }
+                        }
+                        axios.get(cvurl, {
+                            params: _adosXhrParams
+                        }).then(function(response) {
+                            location.href = _skipUrl;
+                        }).catch(function(error) {
+                            console.log(error);
+                        });
+                    }
                     imageBeacon(_arrCkUrl[0], 'ck');
-                    axios.get(_arrCkUrl[1], {
-                        params: _adosXhrParams
-                    }).then(function(response) {
-                        console.log(response.data);
-                        console.log('video xhr');
-                        location.href = _skipUrl;
-                    }).catch(function(error) {
-                        console.log(error);
-                    });
                 }
                 _vflag = false;
             });
