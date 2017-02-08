@@ -19,6 +19,51 @@ var adosUrl = __FIXURL__ || 'http://192.168.110.9:8082/publish/ads/pv';
 
 hock();
 // 'http://192.168.110.9:8082/mgr/strategy/previewGd'
+
+/**
+ * [finishSkip 完成跳转动作]
+ * @param  {[string]} params [向ADOS发送的参数]
+ * @param  {[string]} url    [跳转的URL]
+ * @return {[type]}        [description]
+ */
+function finishSkip(params, url) {
+    axios.get(cvurl, {
+        params: params
+    }).then(function(response) {
+        location.href = url;
+    }).catch(function(error) {
+        console.log(error);
+    });
+}
+/**
+ * [handleClick AD绑定的点击事件处理程序]
+ * @param  {[type]} params [向ADOS发送的参数]
+ * @param  {[type]} url    [跳转的URL]
+ * @return {[type]}        [description]
+ */
+function handleClick(params, url) {
+    if (url !== '') {
+        finishSkip(params, url);
+    } else {
+        return false;
+    }
+}
+/**
+ * [createMultiImageBeacon AD点击事件产生的第三方检测]
+ * @param  {Array}  arr [第三方检测地址]
+ * @return {[type]}     [description]
+ */
+function createMultiImageBeacon(arr = []) {
+    let arrLen = arr.length;
+    if (arr[0] == '') {
+        console.log('no 3th ck')
+        return false;
+    }
+    for (let i = 0; i < arrLen; i++) {
+        imageBeacon(arr[i], 'ck');
+    }
+}
+
 axios.get(adosUrl, {
     params: {
         destType: __DESTTYPE__,
@@ -26,7 +71,7 @@ axios.get(adosUrl, {
         channelPage: __CHANNELPAGE__,
         scrren_width: screenInfo.getScreenWidth(),
         scrren_height: screenInfo.getScreenHeight()
-        // strategyId: idforSearch
+            // strategyId: idforSearch
     },
     withCredentials: true
 })
@@ -34,9 +79,12 @@ axios.get(adosUrl, {
 .then(function(response) {
 
     var _stgStyle = response.data.strategyType;
-    var _arrCkUrl = response.data.ckUrl.split(';') || null;
-    var _arrPvUrl = response.data.pvUrl.split(';') || null;
+    // 点击产生的第三方监测
+    var _arrCkUrl = response.data.ckUrl.split(';');
+    // PageView
+    var _arrPvUrl = response.data.pvUrl.split(';');
     var _lenOfArrCkUrl = _arrCkUrl.length;
+    // 跳转地址
     var _skipUrl = response.data.skipUrl;
 
     if (response.data.isOk) {
@@ -66,31 +114,15 @@ axios.get(adosUrl, {
             loadImage(response.data.ideaUrl, '_s_');
             var _s_ = document.getElementsByClassName('_s_')[0];
             utils.addClass(_s_, 'forck');
-            var _stop = true;
+            let flagOfImage = true;
             if (__DESTTYPE__ == 'wap') {
                 _s_.style.width = '100%';
             }
             eventUtil.addHandler(_s_, 'click', function() {
-                if (_stop) {
-                    _stop = false;
-                    if (_skipUrl == "") {
-                        console.log('no skip url');
-                    } else {
-                        if (_arrCkUrl[0] == "") {
-                            console.log('no 3 ck');
-                        } else {
-                            for (let i = _arrCkUrl.length - 1; i >= 0; i--) {
-                                imageBeacon(_arrCkUrl[i], 'ck');
-                            }
-                        }
-                        axios.get(cvurl, {
-                            params: _adosXhrParams
-                        }).then(function(response) {
-                            location.href = _skipUrl;
-                        }).catch(function(error) {
-                            console.log(error);
-                        });
-                    }
+                if (flagOfImage) {
+                    flagOfImage = false;
+                    createMultiImageBeacon(_arrCkUrl);
+                    handleClick(_adosXhrParams, _skipUrl);
                 }
             });
             break;
@@ -127,30 +159,13 @@ axios.get(adosUrl, {
             var _v_ = document.getElementsByClassName('_v_')[0];
             utils.addClass(_v_, 'forck');
             _v_.style.width = '100%';
-            var _vflag = true;
+            let flagOfVideo = true;
             eventUtil.addHandler(_v_, 'click', function() {
-                if (_vflag) {
-                    if (_skipUrl == "") {
-                        console.log('no skip url');
-                    } else {
-                        if (_arrCkUrl[0] == "") {
-                            console.log('no 3 ck');
-                        } else {
-                            for (let i = _arrCkUrl.length - 1; i >= 0; i--) {
-                                imageBeacon(_arrCkUrl[i], 'ck');
-                            }
-                        }
-                        axios.get(cvurl, {
-                            params: _adosXhrParams
-                        }).then(function(response) {
-                            location.href = _skipUrl;
-                        }).catch(function(error) {
-                            console.log(error);
-                        });
-                    }
-                    imageBeacon(_arrCkUrl[0], 'ck');
+                if (flagOfVideo) {
+                    createMultiImageBeacon(_arrCkUrl);
+                    handleClick(_adosXhrParams, _skipUrl);
                 }
-                _vflag = false;
+                flagOfVideo = false;
             });
             break;
         case (4):
@@ -160,22 +175,10 @@ axios.get(adosUrl, {
             utils.addClass(_a_, 'forck');
             _a_.style.width = '100%';
             if (response.data.downloadType == 1) {
-                axios.get(response.data.downloadUrl, {
-                    params: _adosXhrParams
-                }).then(function(response) {
-                    window.location.href = _apkUrl;
-                }).catch(function(error) {
-                    console.log(error);
-                });
+                handleClick(_adosXhrParams, _apkUrl);
             } else {
                 eventUtil.addHandler(_a_, 'click', function() {
-                    axios.get(response.data.downloadUrl, {
-                        params: _adosXhrParams
-                    }).then(function(response) {
-                        window.location.href = _apkUrl;
-                    }).catch(function(error) {
-                        console.log(error);
-                    });
+                    handleClick(_adosXhrParams, _apkUrl);
                 });
             }
             break;
