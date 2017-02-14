@@ -12,10 +12,8 @@ import { imageBeacon } from './components/imageBeacon/imageBeacon.js';
 import { createInputElement } from './components/createInputElement/createInputElement.js';
 
 import { eventUtil } from './utils/eventUtil.js';
-import { cvurl, storeurl } from './utils/url.js';
+import { cvurl, storeurl, fixUrl } from './utils/url.js';
 import { utils } from './utils/utils.js';
-
-var adosUrl = __FIXURL__ || 'http://192.168.110.9:8082/publish/ads/pv';
 
 hock();
 // 'http://192.168.110.9:8082/mgr/strategy/previewGd'
@@ -64,7 +62,7 @@ function createMultiImageBeacon(arr = []) {
     }
 }
 
-axios.get(adosUrl, {
+axios.get(fixUrl, {
     params: {
         destType: __DESTTYPE__,
         siteCode: __SITECODE__,
@@ -137,7 +135,7 @@ axios.get(adosUrl, {
 
             function foo() {
                 var h = document.getElementById('_ADOS_');
-                h.innerHTML = str;
+                h.innerHTML = window['__domSrc__'];
                 var nodeOfScript = h.getElementsByTagName('script');
                 var scriptStr = '';
                 for (let i = nodeOfScript.length - 1; i >= 0; i--) {
