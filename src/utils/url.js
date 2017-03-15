@@ -1,10 +1,18 @@
 const cvurl = 'http://pub.wiportal.cn/publish/ads/click';
-const storeurl = 'http://pub.wiportal.cn/publish/cookieserver/mapping';
+
+// testing environment
+const mappingUrl = '192.168.110.9:8091/publish/cookieserver/mapping';
+
+//production environment
+// const mappingUrl = 'http://pub.wiportal.cn/publish/cookieserver/mapping';
+
 // const domSrc = window['__domSrc__'];
+
 const fixUrl = window['__FIXURL__'];
+
 const defaultImgUrl = {
-    mobile: 'http://adcdn.wiplatform.com/storage/data/services/tongbu/wap-default.jpg',
-    desktop: 'http://adcdn.wiplatform.com/storage/data/services/tongbu/web-default.png'
+  mobile: 'http://adcdn.wiplatform.com/storage/data/services/tongbu/wap-default.jpg',
+  desktop: 'http://adcdn.wiplatform.com/storage/data/services/tongbu/web-default.png'
 }
 
-export { cvurl, storeurl, fixUrl, defaultImgUrl };
+export { cvurl, mappingUrl, fixUrl, defaultImgUrl };
