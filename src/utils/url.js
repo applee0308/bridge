@@ -1,9 +1,9 @@
-const cvurl = 'http://pub.wiportal.cn/publish/ads/click';
+// testing environment  => 192.168.110.9:8091
+//production environment => http://pub.wiportal.cn
 
-// testing environment
+const cvurl = '192.168.110.9:8091/publish/ads/click';
+// const mappingUrl = 'http://pub.wiportal.cn/publish/ads/click';
 const mappingUrl = '192.168.110.9:8091/publish/cookieserver/mapping';
-
-//production environment
 // const mappingUrl = 'http://pub.wiportal.cn/publish/cookieserver/mapping';
 
 // const domSrc = window['__domSrc__'];
