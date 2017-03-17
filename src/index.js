@@ -10,17 +10,16 @@ import { screenInfo } from './components/screenInfo/screenInfo.js';
 import { imageBeacon } from './components/imageBeacon/imageBeacon.js';
 import { createInputElement } from './components/createInputElement/createInputElement.js';
 
-import { eventUtil } from './utils/eventUtil.js';
-import { cvurl, mappingUrl, fixUrl, defaultImgUrl } from './utils/url.js';
+import { cvurl, mappingUrl, fixUrl, defaultImgUrl, vedioAnalysis } from './utils/url.js';
 import { utils } from './utils/utils.js';
 
 hock();
 // 'http://192.168.110.9:8082/mgr/strategy/previewGd'
 
 /**
- * [finishSkip 完成跳转动作]
- * @param  {[string]} params [向ADOS发送的参数]
- * @param  {[string]} url    [跳转的URL]
+ * [finishSkip]
+ * @param  {[string]} params [params]
+ * @param  {[string]} url    [URL]
  * @return {[type]}        [description]
  */
 function finishSkip(params, url) {
@@ -33,9 +32,9 @@ function finishSkip(params, url) {
   });
 }
 /**
- * [handleClick AD绑定的点击事件处理程序]
- * @param  {[String]} params [向ADOS发送的参数]
- * @param  {[String]} url    [跳转的URL]
+ * [handleClick Ad event handler]
+ * @param  {[String]} params [params]
+ * @param  {[String]} url    [URL]
  * @return {[Bealon]}        [description]
  */
 function handleClick(params, url) {
@@ -46,8 +45,8 @@ function handleClick(params, url) {
   }
 }
 /**
- * [createMultiImageBeacon AD点击事件产生的第三方检测]
- * @param  {Array}  arr [第三方检测地址]
+ * [createMultiImageBeacon AD 3rd listenner]
+ * @param  {Array}  arr [3rd url]
  * @return {[type]}     [description]
  */
 function createMultiImageBeacon(arr = []) {
@@ -78,12 +77,8 @@ axios.get(fixUrl, {
     createInputElement('_ADOS_ADID_', response.data.adId);
     imageBeacon(mappingUrl + '?adId=' + response.data.adId + '&siteCode=' + __SITECODE__ + '&channelPage=' + __CHANNELPAGE__ + '&destType=' + __DESTTYPE__, 'mapping');
     var _stgStyle = response.data.strategyType;
-    // 点击产生的第三方监测
-    // var _arrCkUrl = response.data.ckUrl.split(';');
-    // PageView
     var _arrPvUrl = response.data.pvUrl.split('||');
-    // var _lenOfArrCkUrl = _arrCkUrl.length;
-    // 跳转地址
+    // The skip url of API
     var _skipUrl = response.data.skipUrl;
 
     if (_arrPvUrl[0] !== "") {
@@ -103,9 +98,9 @@ axios.get(fixUrl, {
       adId: document.getElementById('_ADOS_ADID_').value
     };
     /**
-     * [startVideoAnalyze 视频检测分析]
-     * @param  {Array}  t   [发起检测时段]
-     * @param  {Array}  url [视频检测地址]
+     * [startVideoAnalyze Vedio analysis]
+     * @param  {Array}  t   [Launch time]
+     * @param  {Array}  url [url]
      * @return {[type]}     [description]
      */
     function startVideoAnalyze(t = [], url = []) {
@@ -127,10 +122,9 @@ axios.get(fixUrl, {
         if (__DESTTYPE__ == 'wap') {
           _s_.style.width = '100%';
         }
-        eventUtil.addHandler(_s_, 'click', function() {
+        utils.addHandler(_s_, 'click', function() {
           if (flagOfImage) {
             flagOfImage = false;
-            // createMultiImageBeacon(_arrCkUrl);
             handleClick(_adosXhrParams, _skipUrl);
           }
         });
@@ -164,15 +158,14 @@ axios.get(fixUrl, {
         getScript(_arrActivityUrl[0], document.querySelector('#_ADOS_'), foo);
         break;
       case (3):
-        startVideoAnalyze([0, 3000, 5000, 7000, 9900], ['http://g.cn.miaozhen.com/x/k=2038301&p=74x95&dx=__IPDX__&rt=2&ns=__IP__&ni=__IESID__&v=__LOC__&xa=__ADPLATFORM__&mo=__OS__&m0=__OPENUDID__&m0a=__DUID__&m1=__ANDROIDID1__&m1a=__ANDROIDID__&m2=__IMEI__&m4=__AAID__&m5=__IDFA__&m6=__MAC1__&m6a=__MAC__&o=', 'http://g.cn.miaozhen.com/x/k=2038301&p=74x96&dx=__IPDX__&rt=2&ns=__IP__&ni=__IESID__&v=__LOC__&xa=__ADPLATFORM__&mo=__OS__&m0=__OPENUDID__&m0a=__DUID__&m1=__ANDROIDID1__&m1a=__ANDROIDID__&m2=__IMEI__&m4=__AAID__&m5=__IDFA__&m6=__MAC1__&m6a=__MAC__&o=', 'http://g.cn.miaozhen.com/x/k=2038301&p=74x97&dx=__IPDX__&rt=2&ns=__IP__&ni=__IESID__&v=__LOC__&xa=__ADPLATFORM__&mo=__OS__&m0=__OPENUDID__&m0a=__DUID__&m1=__ANDROIDID1__&m1a=__ANDROIDID__&m2=__IMEI__&m4=__AAID__&m5=__IDFA__&m6=__MAC1__&m6a=__MAC__&o=', 'http://g.cn.miaozhen.com/x/k=2038301&p=74x98&dx=__IPDX__&rt=2&ns=__IP__&ni=__IESID__&v=__LOC__&xa=__ADPLATFORM__&mo=__OS__&m0=__OPENUDID__&m0a=__DUID__&m1=__ANDROIDID1__&m1a=__ANDROIDID__&m2=__IMEI__&m4=__AAID__&m5=__IDFA__&m6=__MAC1__&m6a=__MAC__&o=', 'http://g.cn.miaozhen.com/x/k=2038301&p=74x99&dx=__IPDX__&rt=2&ns=__IP__&ni=__IESID__&v=__LOC__&xa=__ADPLATFORM__&mo=__OS__&m0=__OPENUDID__&m0a=__DUID__&m1=__ANDROIDID1__&m1a=__ANDROIDID__&m2=__IMEI__&m4=__AAID__&m5=__IDFA__&m6=__MAC1__&m6a=__MAC__&o='])
+        startVideoAnalyze([0, 3000, 5000, 7000, 9900], vedioAnalysis)
         loadVideo(response.data.ideaUrl, '_v_');
         var _v_ = document.getElementsByClassName('_v_')[0];
         utils.addClass(_v_, 'forck');
         _v_.style.width = '100%';
         let flagOfVideo = true;
-        eventUtil.addHandler(_v_, 'click', function() {
+        utils.addHandler(_v_, 'click', function() {
           if (flagOfVideo) {
-            // createMultiImageBeacon(_arrCkUrl);
             handleClick(_adosXhrParams, _skipUrl);
           }
           flagOfVideo = false;
@@ -187,7 +180,7 @@ axios.get(fixUrl, {
         if (response.data.downloadType == 1) {
           handleClick(_adosXhrParams, _apkUrl);
         } else {
-          eventUtil.addHandler(_a_, 'click', function() {
+          utils.addHandler(_a_, 'click', function() {
             handleClick(_adosXhrParams, _apkUrl);
           });
         }

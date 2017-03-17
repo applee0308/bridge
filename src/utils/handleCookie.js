@@ -1,3 +1,5 @@
+// this file isn't use now
+// but will be used in the future
 function getCookie(name) {
     var arr,
         reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)');
